@@ -2,9 +2,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 
-import java.io.Console;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,16 +10,28 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        FileInputStream fis;
+        FileInputStream fis=null;
         Properties property = new Properties();
 
+
+        try {
         fis = new FileInputStream("src/main/resources/config.properties");
+        } catch (FileNotFoundException e) {
+            System.out.println("Ошибка! Файл .properties не найден!");
+        }
+
         property.load(fis);
 
         int column_value = Integer.parseInt(property.getProperty("column_value"));
 
         Scanner scanner = new Scanner(System.in);
-        CSVReader reader = new CSVReader(new FileReader("src/main/resources/0.csv"));
+
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader("src/main/resources/0.csv"));
+        } catch (FileNotFoundException e) {
+            System.out.println("Ошибка! Файл .csv не найден!");
+        }
 
         int value = 0;
         String[] next_line;
